@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos Agotados</title>
+</head>
+<body>
+    <h1>Bienvenido a la Base de Datos de Productos</h1>
+
+    <nav>
+        <a href="/productos/agotados">Ver Productos Agotados</a>
+        <a href="/productos/stock-bajo">Ver Productos con Stock Bajo</a>
+        <a href="/productos">Ver Todos los Productos</a>
+        <a href="/formulario/registro">Formulario de registro de productos</a>
+    </nav>
+
+    <form method="POST">
+        <p>
+            <label for="nombre">Nombre del Producto:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ request.form.get('nombre', '') }}">
+        </p>
+
+        <p>
+            <label for="stock">Cantidad en Stock:</label>
+            <input type="number" id="stock" name="stock" value="{{ request.form.get('stock', 0) }}">
+        </p>    
+
+        <p>
+            <label for="marca">Marca del Producto:</label>
+            <input type="text" id="marca" name="marca" value="{{ request.form.get('marca', '') }}">
+        </p>
+
+        <p>
+            <label for="proveedor">Proveedor del Producto:</label>
+            <input type="text" id="proveedor" name="proveedor" value="{{ request.form.get('proveedor', '') }}">
+        </p>
+
+        <p>
+            <label for="tipo">Tipo de Producto:</label>
+            <input type="text" id="tipo" name="tipo" value="{{ request.form.get('tipo', '') }}">
+        </p>
+
+        <p>
+            <label for="descripcion">Descripción del Producto:</label>
+            <textarea id="descripcion" name="descripcion">{{ request.form.get('descripcion', '') }}</textarea>
+        </p>
+
+        <p>
+            <label for="fecha_compra">Fecha de Compra del Producto (dd/mm/aaaa):</label>
+            <input type="date" id="fecha_compra" name="fecha_compra" value="{{ request.form.get('fecha_compra', '') }}">
+        </p>
+
+        <p>
+            <label for="precio_extranjero">Precio del Producto en Moneda Extranjera (USD):</label>
+            <input type="number" id="precio_extranjero" name="precio_extranjero" value="{{ request.form.get('precio_extranjero', 0) }}" oninput="calcularPrecioLocal()">
+        </p>
+
+        <p>
+            <label for="precio_dolar">Precio del Dólar (ARS):</label>
+            <input type="number" id="precio_dolar" name="precio_dolar" value="{{ request.form.get('precio_dolar', 0) }}" min="0" step="0.01" oninput="calcularPrecioLocal()">
+        </p>
+
+        <p>
+            <label for="margen_ganancia">Margen de Ganancia (%):</label>
+            <input type="number" id="margen_ganancia" name="margen_ganancia" value="{{ request.form.get('margen_ganancia', 30) }}" oninput="calcularPrecioLocal()">
+        </p>
+
+        <p>
+            <label for="precio_local">Precio del Producto en Moneda Local (Calculado):</label>
+            <input type="text" id="precio_local" name="precio_local" readonly>
+        </p>
+        
+        <button type="submit" name="guardar_producto">Guardar Producto</button>
+    </form>
+
+    <h2>Productos Guardados</h2>
+    <ul>
+        {% for producto in productos %}
+            <li><strong>{{ producto['nombre'] }}</strong> - Precio Local: {{ producto['precio_local'] }} ARS</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function calcularPrecioLocal() {
+            var precioExtranjero = parseFloat(document.getElementById('precio_extranjero').value) || 0;
+            var precioDolar = parseFloat(document.getElementById('precio_dolar').value) || 0;
+            var margenGanancia = parseFloat(document.getElementById('margen_ganancia').value) || 0;
+
+            if (precioExtranjero > 0 && precioDolar > 0) {
+                var precioLocal = precioExtranjero * precioDolar * (1 + margenGanancia / 100);
+                document.getElementById('precio_local').value = precioLocal.toFixed(2);  // Mostrar el precio con dos decimales
+            } else {
+                document.getElementById('precio_local').value = '';  // Dejar el campo vacío si no hay suficientes datos
+            }
+        }
+    </script>
+</body>
+</html>

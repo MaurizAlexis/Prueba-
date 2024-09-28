@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td>{{ producto['nombre'] }}</td>
+                    <td>S/ {{ producto['precio'] }}</td>
+                    <td>{{ producto['cantidad'] }}</td>
+                    <td>
+                        {% if producto['stock'] == 0 %}
+                            <span style="color: red;">Agotado</span>
+                        {% elif producto['stock'] < 2 %}
+                            <span style="color: orange;">Bajo stock</span>
+                        {% else %}
+                            {{ producto['stock'] }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

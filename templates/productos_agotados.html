@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos Agotados</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .agotado {
+            color: red;
+            font-weight: bold;
+        }
+        .poco-stock {
+            color: orange;
+            font-weight: bold;
+        }
+        .con-stock {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventario de Productos - Agotados</h1>
+
+    <nav>
+        <a href="/productos/stock-bajo">Ver Productos con Stock Bajo</a> |
+        <a href="/productos">Ver Todos los Productos</a> |
+        <a href="/formulario/registro">Formulario de registro de productos</a>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Proveedor</th>
+                <th>Precio Local</th>
+                <th>Stock</th>
+                <th>Estado del Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if productos %}
+            {% for producto in productos %}
+                <tr>
+                    <td>{{ producto['nombre'] }}</td>
+                    <td>{{ producto['marca'] }}</td>
+                    <td>{{ producto['proveedor'] }}</td>
+                    <td>S/ {{ producto['precio'] }}</td>
+                    <td>{{ producto['stock'] }}</td>
+                    <td class="agotado">Agotado</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6">No hay productos agotados en este momento.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>
